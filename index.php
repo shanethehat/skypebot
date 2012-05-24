@@ -23,8 +23,7 @@ $app['skype'] = $app->share(function() {
 });
 
 $app['bot'] = $app->protect(function($n) {
-    $bot = new SkypeBot();
-    SkypeBot::$n = $n;
+    $bot = new SkypeBotEngine($n);
 
     return $bot;
 });
@@ -39,10 +38,9 @@ $app->post('/', function(Request $request) use ($app) {
     $app['skype']->Invoke( "SET USER $username ISBLOCKED FALSE" );
 
 
-    $bot = $app['bot']($app['skype']);
-    $bot::notify($app['skype']->Invoke( "SET USER $username BUDDYSTATUS 2"));
+    $app['bot']($app['skype'])->parse($app['skype']->Invoke( "SET USER $username BUDDYSTATUS 2"));
 
-    return "thx";
+    return $app['twig']->render('index.twig', array());
 });
 
 $app->run();

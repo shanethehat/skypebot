@@ -1,9 +1,16 @@
 <?php
 
-class SkypeBot {
-    static public $n = null;
+class SkypeBotEngine {
+    protected $dbus = null;
 
-    static function notify($a) {
+    public function __construct(DbusObject $dbus)
+    {
+        $this->dbus = $dbus;
+    }
+
+    public function parse($a)
+    {
+        var_dump($a);
         list($cmd, $name, $arg, $val) = explode(' ', $a) + array(null, null, null, null);
         if ($cmd === 'USER') {
             switch($arg) {
@@ -23,5 +30,13 @@ class SkypeBot {
         } else {
             echo "$a\n";
         }
+    }
+}
+
+class SkypeBot {
+    static function notify($a) {
+        global $n; // required because of horrible dbus interface
+        $engine = new SkypeBotEngine($n);
+        $engine->parse($a);
     }
 }

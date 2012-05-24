@@ -40,7 +40,7 @@ $app->post('/', function(Request $request) use ($app) {
 
     $app['bot']($app['skype'])->parse($app['skype']->Invoke( "SET USER $username BUDDYSTATUS 2"));
 
-    return $app['twig']->render('index.twig', array());
+    return $app['twig']->render('thanks.twig', array());
 });
 
 $app->run();

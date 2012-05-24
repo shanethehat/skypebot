@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/skypebot.php';
+
+use Symfony\Component\HttpFoundation\Request;
 
 $app = new Silex\Application();
 
@@ -16,6 +19,14 @@ $app['skype'] = $app->share(function() {
     $n = $d->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
     $n->Invoke( "NAME PHP" );
     $n->Invoke( "PROTOCOL 7" );
+    return $n;
+});
+
+$app['bot'] = $app->protect(function($n) {
+    $bot = new SkypeBot();
+    SkypeBot::$n = $n;
+
+    return $bot;
 });
 
 $app->get('/', function() use ($app) {
@@ -26,7 +37,12 @@ $app->post('/', function(Request $request) use ($app) {
     $username = $request->request->get('username');
     $app['skype']->Invoke( "SET USER $username ISAUTHORIZED TRUE" );
     $app['skype']->Invoke( "SET USER $username ISBLOCKED FALSE" );
-    $app['skype']->Invoke( "SET USER $username BUDDYSTATUS 2");
+
+
+    $bot = $app['bot']($app['skype']);
+    $bot::notify($app['skype']->Invoke( "SET USER $username BUDDYSTATUS 2"));
+
+    return "thx";
 });
 
 $app->run();

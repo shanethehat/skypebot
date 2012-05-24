@@ -10,7 +10,6 @@ class SkypeBotEngine {
 
     public function parse($a)
     {
-        var_dump($a);
         list($cmd, $name, $arg, $val) = explode(' ', $a) + array(null, null, null, null);
         if ($cmd === 'USER') {
             switch($arg) {

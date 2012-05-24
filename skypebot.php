@@ -27,15 +27,8 @@ class SkypeBotEngine {
                 break;
             }
         } else {
-            echo "$a\n";
+            throw new Exception($a);
         }
     }
 }
 
-class SkypeBot {
-    static function notify($a) {
-        global $n; // required because of horrible dbus interface
-        $engine = new SkypeBotEngine($n);
-        $engine->parse($a);
-    }
-}

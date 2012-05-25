@@ -5,12 +5,12 @@ class SkypeBot {
     static function notify($a) {
         global $n;
         $engine = new SkypeBotEngine($n);
-	try
-	{
-		$engine->parse($a);
-	} catch (Exception $e) {
-		echo $e->getMessage().PHP_EOL;
-	}
+        try
+        {
+            $engine->parse($a);
+        } catch (Exception $e) {
+            echo $e->getMessage().PHP_EOL;
+        }
     }
 }
 
@@ -21,7 +21,7 @@ $n->Invoke( "PROTOCOL 7" );
 
 $d->registerObject( '/com/Skype/Client', 'com.Skype.API.Client', 'SkypeBot' );
 
-	do {
-	    $s = $d->waitLoop( 1000 );
-	}
-	while ( true );
+do {
+    $s = $d->waitLoop( 1000 );
+}
+while ( true );

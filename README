@@ -1,0 +1,10 @@
+Installation
+
+Install the php dbus extension from pecl.
+Install skype and create a skype user.
+Serve up this directory in your doc root.
+Try it.
+
+You may have problems with PHP not being able to connect to the DBUS.  Currenly the only way I have been able to resolve that is by running
+the whole app under the in built PHP web server (PHP5.4) to allow access to the current environment. There is likely a workaround that will
+enable this to function with apache - however I have not invested the time in working out what it is yet.

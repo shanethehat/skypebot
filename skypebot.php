@@ -23,7 +23,9 @@ class SkypeBotEngine {
         } else if($cmd === 'CHAT') {
             switch($arg) {
                 case 'NAME':
-                    $this->parse($this->dbus->Invoke("CHATMESSAGE $name Hi there! This is your new group chat channel. Unfortunately I can't complete this whole process for you (though I would like to). For github integration, just add this URL; http://incubator.inviqa.com:9001/github.php?id=".urlencode($name)." as a commit hook in your github repository, and I will post all the commits that are pushed to it right here in this channel."));
+                    $githubBase = "http://incubator.inviqa.com:9001/github.php";
+                    $jenkinsBase = "http://incubator.inviqa.com:9001/jenkins.php";
+                    $this->parse($this->dbus->Invoke("CHATMESSAGE $name For github integration, add this URL; $githubBase?id=".urlencode($name)." as a commit hook in your github repository.\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($name).""));
                 break;
             }
         } else {

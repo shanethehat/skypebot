@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'/skypebot.php';
+require_once 'vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,16 +14,11 @@ $app->register(
 );
 
 $app['skype'] = $app->share(function() {
-    $d = new Dbus(Dbus::BUS_SESSION, true);
-    $n = $d->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
-    $n->Invoke( "NAME PHP" );
-    $n->Invoke( "PROTOCOL 7" );
-    return $n;
+    return Inviqa\SkypeEngine::getDbusProxy();
 });
 
-$app['bot'] = $app->protect(function($n) {
-    $bot = new SkypeBotEngine($n);
-
+$app['bot'] = $app->protect(function($dbus) {
+    $bot = new Inviqa\SkypeEngine($dbus);
     return $bot;
 });
 
@@ -36,7 +30,6 @@ $app->post('/', function(Request $request) use ($app) {
     $username = $request->request->get('username');
     $app['skype']->Invoke( "SET USER $username ISAUTHORIZED TRUE" );
     $app['skype']->Invoke( "SET USER $username ISBLOCKED FALSE" );
-
 
     $app['bot']($app['skype'])->parse($app['skype']->Invoke( "SET USER $username BUDDYSTATUS 2"));
 

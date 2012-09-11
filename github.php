@@ -1,10 +1,11 @@
 <?php
+require_once 'vendor/autoload.php';
 
-$message = array();
 if (isset($_REQUEST['payload'])) {
     $payload = json_decode($_REQUEST['payload']);
 
     if ($payload) {
+        $message = array();
         foreach ($payload->commits as $commit) {
             $lines = explode("\n", $commit->message);
             $message[] = '- ' . $lines[0] . ' ('.substr($commit->id, 0, 6).')';
@@ -18,12 +19,8 @@ if (isset($_REQUEST['payload'])) {
             $payload->repository->name,
             join("\n", $message)
         );
+
+        Inviqa\SkypeEngine::getDbusProxy()->Invoke( "CHATMESSAGE {$_REQUEST['id']} $info");
     }
-} else {
-    $info = "I received an invalid request from someone (not GitHub?). If this continues, something is broken!";
 }
 
-$n = (new Dbus( Dbus::BUS_SESSION, true ))->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
-$n->Invoke( "NAME PHP" );
-$n->Invoke( "PROTOCOL 7" );
-$n->Invoke( "CHATMESSAGE {$_REQUEST['id']} $info");

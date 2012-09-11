@@ -1,12 +1,11 @@
 <?php
-require_once 'skypebot.php';
+require_once 'vendor/autoload.php';
 
 class SkypeBot {
     static function notify($a) {
         global $n;
-        $engine = new SkypeBotEngine($n);
-        try
-        {
+        $engine = new \Inviqa\SkypeEngine($n);
+        try {
             $engine->parse($a);
         } catch (Exception $e) {
             echo $e->getMessage().PHP_EOL;

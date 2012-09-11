@@ -1,9 +1,10 @@
 <?php
+namespace Inviqa;
 
-class SkypeBotEngine {
+class SkypeEngine {
     protected $dbus = null;
 
-    public function __construct(DbusObject $dbus)
+    public function __construct(\DbusObject $dbus)
     {
         $this->dbus = $dbus;
     }
@@ -29,8 +30,16 @@ class SkypeBotEngine {
                 break;
             }
         } else {
-            throw new Exception($a);
+            throw new Exception\UnexpectedCommand($a);
         }
+    }
+
+    public static function getDbusProxy()
+    {
+        $proxy = (new Dbus( Dbus::BUS_SESSION, true ))->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
+        $proxy->Invoke( "NAME PHP" );
+        $proxy->Invoke( "PROTOCOL 7" );
+        return $proxy;
     }
 }
 

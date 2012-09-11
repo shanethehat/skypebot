@@ -2,5 +2,10 @@
     "require": {
         "silex/silex": "1.0.*",
         "twig/twig": "1.6.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Inviqa": "src"
+        }
     }
 }

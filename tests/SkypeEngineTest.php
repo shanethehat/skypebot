@@ -14,7 +14,7 @@ class SkypeEngineTest extends PHPUnit_Framework_TestCase
         $dbus = $this->getMock('DbusObject', array('Invoke'));
         $this->expectSkype($dbus, 0, $this->equalTo('CHAT CREATE xyz,xyz'), 'CHAT xyz NAME');
         $this->expectSkype($dbus, 1, $this->stringStartsWith('CHATMESSAGE xyz'));
-        $this->expectSkype($dbus, 2, $this->stringStartsWith('ALTER CHATMEMBER xyz SETROLETO MASTER'));
+//        $this->expectSkype($dbus, 2, $this->stringStartsWith('ALTER CHATMEMBER xyz SETROLETO MASTER'));
 
         $e = new \Inviqa\SkypeEngine($dbus);
         $e->parse('USER xyz BUDDYSTATUS 3'); // skype api friend status update to accepted

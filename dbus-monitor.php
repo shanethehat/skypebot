@@ -6,6 +6,7 @@ class SkypeBot {
         global $n;
         $engine = new \Inviqa\SkypeEngine($n);
         try {
+var_dump($a);
             $engine->parse($a);
         } catch (Exception $e) {
             echo $e->getMessage().PHP_EOL;

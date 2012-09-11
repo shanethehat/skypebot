@@ -35,7 +35,7 @@ class SkypeEngine {
 
     public static function getDbusProxy()
     {
-        $proxy = (new Dbus( Dbus::BUS_SESSION, true ))->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
+        $proxy = (new \Dbus(\Dbus::BUS_SESSION, true))->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
         $proxy->Invoke( "NAME PHP" );
         $proxy->Invoke( "PROTOCOL 7" );
         return $proxy;

@@ -8,8 +8,7 @@ $app = new Silex\Application();
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
-        'twig.path'       => __DIR__.'/views',
-        'twig.class_path' => __DIR__.'/vendor/twig/lib',
+        'twig.path'       => __DIR__.'/views'
     )
 );
 

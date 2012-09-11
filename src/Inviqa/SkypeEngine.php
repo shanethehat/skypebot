@@ -27,10 +27,9 @@ class SkypeEngine {
                     $githubBase = "http://incubator.inviqa.com:9001/github.php";
                     $jenkinsBase = "http://incubator.inviqa.com:9001/jenkins.php";
                     $this->parse($this->dbus->Invoke("CHATMESSAGE $name For github integration, add this URL; $githubBase?id=".urlencode($name)." as a commit hook in your github repository.\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($name).""));
+                    $this->parse($this->dbus->Invoke("ALTER CHATMEMBER $name SETROLETO MASTER"));
                 break;
             }
-        } else {
-            throw new Exception\UnexpectedCommand($a);
         }
     }
 

@@ -4,7 +4,7 @@ require_once 'vendor/autoload.php';
 use Symfony\Component\HttpFoundation\Request;
 
 $app = new Silex\Application();
-
+$app['debug'] = true;
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(

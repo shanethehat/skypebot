@@ -4,6 +4,8 @@ namespace Inviqa;
 class SkypeEngine {
     protected $dbus = null;
 
+    protected $commands = array();
+
     public function __construct(\DbusObject $dbus)
     {
         $this->dbus = $dbus;
@@ -19,7 +21,7 @@ class SkypeEngine {
                         if ($val == 3) {
                             // user accepted friend request - send welcome
                             $this->parse($this->dbus->Invoke("CHAT CREATE $name,$name"));
-                            $this->parse($this->dbus->Invoke("ALTER CHATMEMBER $name SETROLETO MASTER"));
+                            $this->parse($this->dbus->Invoke("CHATMEMBER $name SETROLETO MASTER"));
                         }
                     break;
                 }
@@ -27,18 +29,70 @@ class SkypeEngine {
             case 'CHAT':
                 switch($arg) {
                     case 'NAME':
-                        $githubBase = "http://incubator.inviqa.com:9001/github.php";
-                        $jenkinsBase = "http://incubator.inviqa.com:9001/jenkins.php";
-                        $this->parse($this->dbus->Invoke("CHATMESSAGE $name For github integration, add this URL; $githubBase?id=".urlencode($name)." as a commit hook in your github repository.\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($name).""));
-                    break;
+                        $this->showChatInfo($name);
+                        break;
                 }
                 break;
             case 'CHATMESSAGE':
                 if ($arg == 'STATUS' && $val == 'RECEIVED') {
-                    echo "Message: ". $this->dbus->Invoke("GET CHATMESSAGE $name BODY") . "\n";
+                    $chatname = $this->getInfo($this->dbus->Invoke("GET CHATMESSAGE $name CHATNAME"));
+                    $handle = $this->getInfo($this->dbus->Invoke("GET CHATMESSAGE $name FROM_HANDLE"));
+                    $body = $this->getInfo($this->dbus->Invoke("GET CHATMESSAGE $name BODY"));
+                    printf(
+                        "%s %s: %s\n",
+                        $chatname['val'],
+                        $handle['val'],
+                        $body['val']
+                    );
+
+
+                    $msg = array_map('strtolower', explode(' ', $body['val']));
+                    if (array_key_exists($msg[0], $this->commands)) {
+                        $this->commands[$msg[0]]($this, $chatname, $handle, $body);
+                    }
+                    /*
+                        case ':info':
+                            $this->showChatInfo($chatname['val']);
+                            break;
+                    }
+                    */
                 }
+                $this->dbus->Invoke("SET CHATMESSAGE $name SEEN");
                 break;
         }
+    }
+
+    public function add($cmd, callable $action)
+    {
+        $this->commands[strtolower($cmd)] = $action;
+        return $this;
+    }
+
+
+    public function cmd($str)
+    {
+        return $this->dbus->Invoke($str);
+    }
+
+    protected function getInfo($str)
+    {
+        $split = explode(' ', $str);
+        list($cmd, $name, $arg) = $split;
+        $val = implode(' ', array_slice($split, 3));
+
+        return array(
+            'cmd' => $cmd,
+            'name' => $name,
+            'arg' => $arg,
+            'val' => $val
+        );
+    }
+
+    protected function showChatInfo($name)
+    {
+        $githubBase = "http://incubator.inviqa.com:9001/github.php";
+        $jenkinsBase = "http://incubator.inviqa.com:9001/jenkins.php";
+        $this->dbus->Invoke("CHATMESSAGE $name For github integration, add this URL; $githubBase?id=".urlencode($name)." as a commit hook in your github repository.\n\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($name)."");
     }
 
     public static function getDbusProxy()

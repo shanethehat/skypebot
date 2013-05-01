@@ -1,10 +1,10 @@
 <?php
 require_once 'vendor/autoload.php';
+use Inviqa\SkypeEngine;
 
 class SkypeBot {
     static function notify($a) {
-        global $n;
-        $engine = new \Inviqa\SkypeEngine($n);
+        global $engine;
         try {
             $engine->parse($a);
         } catch (Exception $e) {
@@ -16,6 +16,7 @@ class SkypeBot {
 $d = new Dbus( Dbus::BUS_SESSION, true );
 $success = false;
 $n = $d->createProxy( "com.Skype.API", "/com/Skype", "com.Skype.API");
+$engine = require_once('engine.php');
 do {
 	try {
 		$n->Invoke( "NAME PHP" );

@@ -17,7 +17,7 @@ $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body
 });
 
 $engine->add(':burritos?', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AhCZJEVLpRf5dGN3VnhMWnBEZ1hDRjZ5TEFQc3JOclE");
+    $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AgaDiKrNejnsdHRGTEFIMGxlOVVxQXpkbExYQlk1N2c");
 });
 
 return $engine;

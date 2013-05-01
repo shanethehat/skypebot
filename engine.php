@@ -32,7 +32,7 @@ $engine->add(':badger', function(SkypeEngine $engine, $chatname, $handle, $body)
             'http://www.binocular-repairs.com/wp-content/uploads/2011/11/badger-7669.jpg',
             'http://www.wildlifeonline.me.uk/images/graphics/european_badger_04.jpg',
         );
-        $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", array_rand($badgers)));
+        $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", $badgers[array_rand($badgers)]));
 });
 
 return $engine;

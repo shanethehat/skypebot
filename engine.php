@@ -35,4 +35,9 @@ $engine->add(':badger', function(SkypeEngine $engine, $chatname, $handle, $body)
         $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", $badgers[array_rand($badgers)]));
 });
 
+$engine->add(':wiki', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $arg = explode(' ', $body['val']);
+    $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", "https://ibuildings.jira.com/wiki/label/PROFSERV/{$arg[1]}"));
+});
+
 return $engine;

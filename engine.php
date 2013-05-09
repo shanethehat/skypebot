@@ -22,10 +22,6 @@ $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body
     $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} ", $suggestions[array_rand($suggestions)]));
 });
 
-$engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    $engine->cmd("CHATMESSAGE {$chatname['val']} Have you tried clearing the cache?");
-});
-
 $engine->add(':burritos?', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AgaDiKrNejnsdHRGTEFIMGxlOVVxQXpkbExYQlk1N2c");
 });

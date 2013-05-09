@@ -13,6 +13,16 @@ $engine->add(':ping', function(SkypeEngine $engine, $chatname, $handle, $body) {
 });
 
 $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $suggestions = array(
+        'Have you tried clearing the cache?',
+        'Have you tried reindexing?',
+        'Have you tried restarting memcache?',
+        'Have you sacrificed a chicken?',
+    );
+    $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} ", $suggestions[array_rand($suggestions)]));
+});
+
+$engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $engine->cmd("CHATMESSAGE {$chatname['val']} Have you tried clearing the cache?");
 });
 

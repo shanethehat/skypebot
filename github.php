@@ -1,6 +1,8 @@
 <?php
 require_once 'vendor/autoload.php';
 
+# Hack to work around strange php issue...
+parse_str(file_get_contents('php://input'), $_REQUEST);
 if (isset($_REQUEST['payload'])) {
     $payload = json_decode($_REQUEST['payload']);
 

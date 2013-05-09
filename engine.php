@@ -19,7 +19,7 @@ $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body
         'Have you tried restarting memcache?',
         'Have you sacrificed a chicken?',
     );
-    $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} ", $suggestions[array_rand($suggestions)]));
+    $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", $suggestions[array_rand($suggestions)]));
 });
 
 $engine->add(':burritos?', function(SkypeEngine $engine, $chatname, $handle, $body) {

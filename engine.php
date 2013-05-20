@@ -38,7 +38,7 @@ $engine->add(':deploy', function(SkypeEngine $engine, $chatname, $handle, $body)
 $engine->add(':info', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $githubBase = "http://incubator.inviqa.com:9001/github.php";
     $jenkinsBase = "http://incubator.inviqa.com:9001/jenkins.php";
-    $this->dbus->Invoke("CHATMESSAGE {$chatname['val']} For github integration, add this URL; $githubBase?id=".urlencode($chatname['val'])." as a commit hook in your github repository.\n\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($chatname['val'])."");
+    $engine->cmd("CHATMESSAGE {$chatname['val']} For github integration, add this URL; $githubBase?id=".urlencode($chatname['val'])." as a commit hook in your github repository.\n\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($chatname['val'])."");
 });
 
 return $engine;

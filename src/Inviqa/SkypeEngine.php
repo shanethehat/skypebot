@@ -29,7 +29,7 @@ class SkypeEngine {
             case 'CHAT':
                 switch($arg) {
                     case 'NAME':
-                        $this->showChatInfo($name);
+                        $this->commands[':info']($this, array('val' => $name), null, null);
                         break;
                 }
                 break;
@@ -50,12 +50,6 @@ class SkypeEngine {
                     if (array_key_exists($msg[0], $this->commands)) {
                         $this->commands[$msg[0]]($this, $chatname, $handle, $body);
                     }
-                    /*
-                        case ':info':
-                            $this->showChatInfo($chatname['val']);
-                            break;
-                    }
-                    */
                 }
                 $this->dbus->Invoke("SET CHATMESSAGE $name SEEN");
                 break;

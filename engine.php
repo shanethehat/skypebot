@@ -31,8 +31,42 @@ $engine->add(':wiki', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", "https://ibuildings.jira.com/wiki/label/PROFSERV/{$arg[1]}"));
 });
 
+
 $engine->add(':deploy', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    
+    $dir = '/var/lib/bot';
+
+    $roomgit = array(
+        '#blongden.inviqa/$dhowlett.inviqa;66b8c356c0d9e779'   => 'git@github.com:PZCussons/drupal.git',
+        '#grogers.inviqa/$gkemp.inviqa;18662fe1c4c1b330'       => 'git@github.com:PZCussons/drupal.git',
+        '#blongden.inviqa/$jenkins-incubator;1d56633d322bb7fc' => 'git@github.com:PZCussons/drupal.git'
+    );
+
+    if (!array_key_exists($chatname['val'], $roomgit)) {
+        $engine->cmd("CHATMESSAGE {$chatname['val']} I don't know about any deployments for this skype room.");
+        return false;
+    }
+    $output = array();
+    preg_match('/(?P<user>\w+)@(?P<host>[^:]+):(?P<path>.+)/', $roomgit[$chatname['val']], $url);
+    $parent = explode('/', $url['path']);
+    if (!file_exists("$dir/{$parent[0]}")) {
+        mkdir("$dir/{$parent[0]}");
+    }
+    if (!file_exists("$dir/{$url['path']}")) {
+        chdir($dir);
+        exec("git clone {$roomgit[$chatname['val']]} {$url['path']} 2>&1", $output);
+        chdir("$dir/{$url['path']}");
+    } else {
+        chdir("$dir/{$url['path']}");
+        exec("git pull origin master 2>&1", $output);
+    }
+    chdir("$dir/{$url['path']}/tools/capistrano");
+
+    $engine->cmd("CHATMESSAGE {$chatname['val']} I am deploying {$url['path']} to the development stage.");
+    exec("cap deploy 2>&1", $output);
+    $filename = uniqid();
+    $log = "logs/$filename.txt";
+    file_put_contents(__DIR__."/$log", implode("\n", $output));
+    $engine->cmd("CHATMESSAGE {$chatname['val']} Deployment complete - check http://incubator.inviqa.com:9001/$log for details.");
 });
 
 $engine->add(':info', function(SkypeEngine $engine, $chatname, $handle, $body) {

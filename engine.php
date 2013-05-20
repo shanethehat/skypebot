@@ -16,7 +16,13 @@ $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body
     $suggestions = array(
         'Have you tried clearing the cache?',
         'Have you tried reindexing?',
-        'Have you tried restarting memcache?',
+        'Have you tried restarting memcache or clearing redis?',
+        'Has Magento fallen back to filesystem cache in the system /tmp directory?',
+        'Is it a case-sensitivity issue?',
+        'Is there a conflicting module over-ride?',
+        'Is the layout XML picking up the correct block?',
+        'Is the template getting the right data from the block?',
+        'Is a store-scope configuration setting over-riding the default setting?',
         'Have you sacrificed a chicken?',
     );
     $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} ", $suggestions[array_rand($suggestions)]));

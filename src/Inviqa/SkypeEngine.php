@@ -53,7 +53,7 @@ class SkypeEngine {
 
                     //special case for Andrew "dog boy" Baker
                     if ($handle['val'] == "abaker.inviqa") {
-                        if (strstr(strtolower($body['val']), 'dog')) {
+                        if (stristr($body['val'], 'dog')) {
                             $this->dbus->Invoke("CHATMESSAGE {$chatname['val']} Potential dog story detected. :-O");
                             $this->dbus->Invoke("ALTER CHAT {$chatname['val']} KICK {$handle['val']}");
                         }

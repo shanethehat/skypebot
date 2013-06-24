@@ -32,6 +32,10 @@ $engine->add(':burritos?', function(SkypeEngine $engine, $chatname, $handle, $bo
     $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AgaDiKrNejnsdHRGTEFIMGxlOVVxQXpkbExYQlk1N2c");
 });
 
+$engine->add(':planner', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AvKTHYI2dY1HdG1FakNCTE9IbWtVZDZGX2RDYkp5Q0E#gid=41");
+});
+
 $engine->add(':wiki', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $arg = explode(' ', $body['val']);
     $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", "https://ibuildings.jira.com/wiki/label/PROFSERV/{$arg[1]}"));

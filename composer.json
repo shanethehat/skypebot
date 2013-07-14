@@ -8,5 +8,8 @@
         "psr-0": {
             "Inviqa": "src"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }

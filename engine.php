@@ -1,15 +1,21 @@
 <?php
+
+use Inviqa\Command\ChatMessageCommandHandler;
+use Inviqa\Command\UserCommandHandler;
 use Inviqa\SkypeEngine;
 global $n;
 
 $engine = new SkypeEngine($n);
+$engine->addCommandHandler(new UserCommandHandler());
+$chatMessageHandler = new ChatMessageCommandHandler();
+$engine->addCommandHandler($chatMessageHandler);
 
-$engine->add(':create', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    $engine->cmd("CHATMESSAGE {$chatname['val']} Sure. Why not.");
+$chatMessageHandler->add(':create', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $engine->invoke("CHATMESSAGE {$chatname['val']} Sure. Why not.");
 });
 
-$engine->add(':ping', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    $engine->cmd("CHATMESSAGE {$chatname['val']} Pong!");
+$chatMessageHandler->add(':ping', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $engine->invoke("CHATMESSAGE {$chatname['val']} Pong!");
 });
 
 $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body) {
@@ -25,24 +31,24 @@ $engine->add(':magento', function(SkypeEngine $engine, $chatname, $handle, $body
         'Is a store-scope configuration setting over-riding the default setting?',
         'Have you sacrificed a chicken?',
     );
-    $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", $suggestions[array_rand($suggestions)]));
+    $engine->invoke(sprintf("CHATMESSAGE {$chatname['val']} %s", $suggestions[array_rand($suggestions)]));
 });
 
-$engine->add(':burritos?', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AgaDiKrNejnsdHRGTEFIMGxlOVVxQXpkbExYQlk1N2c");
+$chatMessageHandler->add(':burritos?', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $engine->invoke("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AgaDiKrNejnsdHRGTEFIMGxlOVVxQXpkbExYQlk1N2c");
 });
 
-$engine->add(':planner', function(SkypeEngine $engine, $chatname, $handle, $body) {
-    $engine->cmd("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AvKTHYI2dY1HdG1FakNCTE9IbWtVZDZGX2RDYkp5Q0E#gid=41");
+$chatMessageHandler->add(':planner', function(SkypeEngine $engine, $chatname, $handle, $body) {
+    $engine->invoke("CHATMESSAGE {$chatname['val']} https://docs.google.com/a/inviqa.com/spreadsheet/ccc?key=0AvKTHYI2dY1HdG1FakNCTE9IbWtVZDZGX2RDYkp5Q0E#gid=41");
 });
 
-$engine->add(':wiki', function(SkypeEngine $engine, $chatname, $handle, $body) {
+$chatMessageHandler->add(':wiki', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $arg = explode(' ', $body['val']);
-    $engine->cmd(sprintf("CHATMESSAGE {$chatname['val']} %s", "https://ibuildings.jira.com/wiki/label/PROFSERV/{$arg[1]}"));
+    $engine->invoke(sprintf("CHATMESSAGE {$chatname['val']} %s", "https://ibuildings.jira.com/wiki/label/PROFSERV/{$arg[1]}"));
 });
 
 
-$engine->add(':deploy', function(SkypeEngine $engine, $chatname, $handle, $body) {
+$chatMessageHandler->add(':deploy', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $dir = '/var/lib/bot';
 
     $roomgit = array(
@@ -52,7 +58,7 @@ $engine->add(':deploy', function(SkypeEngine $engine, $chatname, $handle, $body)
     );
 
     if (!array_key_exists($chatname['val'], $roomgit)) {
-        $engine->cmd("CHATMESSAGE {$chatname['val']} I don't know about any deployments for this skype room.");
+        $engine->invoke("CHATMESSAGE {$chatname['val']} I don't know about any deployments for this skype room.");
         return false;
     }
     $output = array();
@@ -71,18 +77,18 @@ $engine->add(':deploy', function(SkypeEngine $engine, $chatname, $handle, $body)
     }
     chdir("$dir/{$url['path']}/tools/capistrano");
 
-    $engine->cmd("CHATMESSAGE {$chatname['val']} I am deploying {$url['path']} to the development stage.");
+    $engine->invoke("CHATMESSAGE {$chatname['val']} I am deploying {$url['path']} to the development stage.");
     exec("cap deploy 2>&1", $output);
     $filename = uniqid();
     $log = "logs/$filename.txt";
     file_put_contents(__DIR__."/$log", implode("\n", $output));
-    $engine->cmd("CHATMESSAGE {$chatname['val']} Deployment complete - check http://incubator.inviqa.com:9001/$log for details.");
+    $engine->invoke("CHATMESSAGE {$chatname['val']} Deployment complete - check http://incubator.inviqa.com:9001/$log for details.");
 });
 
 $engine->add(':info', function(SkypeEngine $engine, $chatname, $handle, $body) {
     $githubBase = "http://incubator.inviqa.com:9001/github.php";
     $jenkinsBase = "http://incubator.inviqa.com:9001/jenkins.php";
-    $engine->cmd("CHATMESSAGE {$chatname['val']} For github integration, add this URL; $githubBase?id=".urlencode($chatname['val'])." as a commit hook in your github repository.\n\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($chatname['val'])."");
+    $engine->invoke("CHATMESSAGE {$chatname['val']} For github integration, add this URL; $githubBase?id=".urlencode($chatname['val'])." as a commit hook in your github repository.\n\nFor Jenkins Notifications use $jenkinsBase?id=".urlencode($chatname['val'])."");
 });
 
 return $engine;

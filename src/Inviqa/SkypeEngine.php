@@ -1,7 +1,11 @@
 <?php
+
 namespace Inviqa;
 
+use Inviqa\Command\CommandHandlerInterface;
+
 class SkypeEngine {
+    
     protected $dbus = null;
 
     protected $commands = array();
@@ -14,64 +18,20 @@ class SkypeEngine {
     public function parse($a)
     {
         list($cmd, $name, $arg, $val) = explode(' ', $a) + array(null, null, null, null);
-        switch ($cmd) {
-            case 'USER':
-            switch($arg) {
-                case 'BUDDYSTATUS':
-                    if ($val == 3) {
-                        // user accepted friend request - send welcome
-                        $this->parse($this->dbus->Invoke("CHAT CREATE $name,$name"));
-                        $this->parse($this->dbus->Invoke("CHATMEMBER $name SETROLETO MASTER"));
-                    }
+        foreach ($this->commands as $commandHandler) {
+            if($commandHandler->handleCommand($cmd, $name, $arg, $val)) {
                 break;
             }
-            break;
-            case 'CHAT':
-            switch($arg) {
-                case 'NAME':
-                    $this->commands[':info']($this, array('val' => $name), null, null);
-                    break;
-            }
-            break;
-            case 'CHATMESSAGE':
-            if ($arg == 'STATUS' && $val == 'RECEIVED') {
-                $chatname = $this->getInfo($this->dbus->Invoke("GET CHATMESSAGE $name CHATNAME"));
-                $handle = $this->getInfo($this->dbus->Invoke("GET CHATMESSAGE $name FROM_HANDLE"));
-                $body = $this->getInfo($this->dbus->Invoke("GET CHATMESSAGE $name BODY"));
-                printf(
-                    "%s %s: %s\n",
-                    $chatname['val'],
-                    $handle['val'],
-                    $body['val']
-                );
-
-
-                $msg = array_map('strtolower', explode(' ', $body['val']));
-                if (array_key_exists($msg[0], $this->commands)) {
-                    $this->commands[$msg[0]]($this, $chatname, $handle, $body);
-                }
-
-                //special case for Andrew "dog boy" Baker
-                if ($handle['val'] == "abaker.inviqa" && $chatname['val'] == '#ben.longden/$rowan.merewood;1d3ab49e7f5995e1') {
-                    if (stristr(preg_replace('#[\W]#', '', $body['val']), 'dog') || stristr($body['val'], 'toivo') || stristr($body['val'], 'mansfield')) {
-                        $this->dbus->Invoke("CHATMESSAGE {$chatname['val']} Potential dog story detected. :-O");
-                        $this->dbus->Invoke("ALTER CHAT {$chatname['val']} KICK {$handle['val']}");
-                    }
-                }
-            }
-            $this->dbus->Invoke("SET CHATMESSAGE $name SEEN");
-            break;
         }
     }
-
-    public function add($cmd, callable $action)
+    
+    public function addCommandHandler(CommandHandlerInterface $commandHandler)
     {
-        $this->commands[strtolower($cmd)] = $action;
-        return $this;
+        $commandHandler->setEngine($this);
+        $this->commands[] = $commandHandler;
     }
 
-
-    public function cmd($str)
+    public function invoke($str)
     {
         return $this->dbus->Invoke($str);
     }

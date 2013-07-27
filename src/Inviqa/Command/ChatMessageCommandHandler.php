@@ -31,7 +31,7 @@ class ChatMessageCommandHandler implements CommandHandlerInterface
 
             $msg = array_map('strtolower', explode(' ', $body['val']));
             if (array_key_exists($msg[0], $this->commands)) {
-                $this->commands[$msg[0]]($this, $chatname, $handle, $body);
+                $this->commands[$msg[0]]($this->engine, $chatname, $handle, $body);
             }
 
             //special case for Andrew "dog boy" Baker

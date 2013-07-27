@@ -8,18 +8,18 @@ class SkypeEngine {
     
     protected $dbus = null;
 
-    protected $commands = array();
+    protected $handlers = array();
 
     public function __construct(\DbusObject $dbus)
     {
         $this->dbus = $dbus;
     }
 
-    public function parse($a)
+    public function parse($command)
     {
-        list($cmd, $name, $arg, $val) = explode(' ', $a) + array(null, null, null, null);
-        foreach ($this->commands as $commandHandler) {
-            if($commandHandler->handleCommand($cmd, $name, $arg, $val)) {
+        $skypeCommand = new SkypeCommand($command);
+        foreach ($this->handlers as $commandHandler) {
+            if($commandHandler->handleCommand($skypeCommand)) {
                 break;
             }
         }
@@ -28,26 +28,12 @@ class SkypeEngine {
     public function addCommandHandler(CommandHandlerInterface $commandHandler)
     {
         $commandHandler->setEngine($this);
-        $this->commands[] = $commandHandler;
+        $this->handlers[] = $commandHandler;
     }
 
     public function invoke($str)
     {
         return $this->dbus->Invoke($str);
-    }
-
-    protected function getInfo($str)
-    {
-        $split = explode(' ', $str);
-        list($cmd, $name, $arg) = $split;
-        $val = implode(' ', array_slice($split, 3));
-
-        return array(
-            'cmd' => $cmd,
-            'name' => $name,
-            'arg' => $arg,
-            'val' => $val
-        );
     }
 
     protected function showChatInfo($name)

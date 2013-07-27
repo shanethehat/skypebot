@@ -3,6 +3,7 @@
 namespace Inviqa\Command;
 
 use Inviqa\SkypeEngine;
+use Inviqa\SkypeCommandInterface;
 
 class UserCommandHandler implements CommandHandlerInterface
 {
@@ -10,15 +11,15 @@ class UserCommandHandler implements CommandHandlerInterface
     
     protected $engine;
     
-    public function handleCommand($command, $name, $arg, $val)
+    public function handleCommand(SkypeCommandInterface $command)
     {
-        if (self::COMMAND !== $command) {
+        if (self::COMMAND !== $command->getCommand()) {
             return false;
         }
         
-        switch($arg) {
+        switch($command->getArgument()) {
             case 'BUDDYSTATUS':
-                $this->handleBuddyStatus($name, $val);
+                $this->handleBuddyStatus($command->getName(), $command->getValue());
                 break;
             case 'RECIEVEDAUTHREQUEST':
 

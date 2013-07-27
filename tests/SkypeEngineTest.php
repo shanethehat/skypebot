@@ -33,7 +33,7 @@ class SkypeEngineTest extends PHPUnit_Framework_TestCase
         $command = $this->getMock('Inviqa\Command\CommandHandlerInterface');
         $command->expects($this->once())
             ->method('handleCommand')
-            ->with('cmd', 'name', 'arg', 'val')
+            ->with($this->isInstanceOf('Inviqa\SkypeCommandInterface'))
             ->will($this->returnValue(true));
         
         $this->engine->addCommandhandler($command);
@@ -46,7 +46,7 @@ class SkypeEngineTest extends PHPUnit_Framework_TestCase
         $command1 = $this->getMock('Inviqa\Command\CommandHandlerInterface');
         $command1->expects($this->once())
             ->method('handleCommand')
-            ->with('cmd', 'name', 'arg', 'val')
+            ->with($this->isInstanceOf('Inviqa\SkypeCommandInterface'))
             ->will($this->returnValue(true));
         
         $command2 = $this->getMock('Inviqa\Command\CommandHandlerInterface');
@@ -64,13 +64,13 @@ class SkypeEngineTest extends PHPUnit_Framework_TestCase
         $command1 = $this->getMock('Inviqa\Command\CommandHandlerInterface');
         $command1->expects($this->once())
             ->method('handleCommand')
-            ->with('cmd', 'name', 'arg', 'val')
+            ->with($this->isInstanceOf('Inviqa\SkypeCommandInterface'))
             ->will($this->returnValue(false));
         
         $command2 = $this->getMock('Inviqa\Command\CommandHandlerInterface');
         $command2->expects($this->once())
             ->method('handleCommand')
-            ->with('cmd', 'name', 'arg', 'val')
+            ->with($this->isInstanceOf('Inviqa\SkypeCommandInterface'))
             ->will($this->returnValue(true));
         
         $this->engine->addCommandhandler($command1);

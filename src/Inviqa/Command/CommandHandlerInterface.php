@@ -3,6 +3,7 @@
 namespace Inviqa\Command;
 
 use Inviqa\SkypeEngine;
+use Inviqa\SkypeCommandInterface;
 
 interface CommandHandlerInterface
 {
@@ -16,7 +17,7 @@ interface CommandHandlerInterface
      * 
      * @return boolean
      */
-    public function handleCommand($command, $name, $arg, $val);
+    public function handleCommand(SkypeCommandInterface $command);
     
     public function setEngine(SkypeEngine $engine);
 }

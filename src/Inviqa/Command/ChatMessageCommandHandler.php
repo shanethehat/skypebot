@@ -3,6 +3,7 @@
 namespace Inviqa\Command;
 
 use Inviqa\SkypeEngine;
+use Inviqa\SkypeCommandInterface;
 
 class ChatMessageCommandHandler implements CommandHandlerInterface
 {
@@ -12,13 +13,15 @@ class ChatMessageCommandHandler implements CommandHandlerInterface
 
     protected $commands = array();
     
-    public function handleCommand($command, $name, $arg, $val)
+    public function handleCommand(SkypeCommandInterface $command)
     {
-        if (self::COMMAND !== $command) {
+        if (self::COMMAND !== $command->getCommand()) {
             return false;
         }
         
-        if ($arg == 'STATUS' && $val == 'RECEIVED') {
+        $name = $command->getName();
+        
+        if ($command->getArgument() == 'STATUS' && $command->getValue() == 'RECEIVED') {
             $chatname = $this->getInfo($this->engine->invoke("GET CHATMESSAGE $name CHATNAME"));
             $handle = $this->getInfo($this->engine->invoke("GET CHATMESSAGE $name FROM_HANDLE"));
             $body = $this->getInfo($this->engine->invoke("GET CHATMESSAGE $name BODY"));

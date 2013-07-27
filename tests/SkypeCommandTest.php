@@ -1,10 +1,12 @@
 <?php
 
+use Inviqa\SkypeCommand;
+
 class SkypeCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testCommandPopulatesWithFourPartString()
     {
-        $command = new Inviqa\SkypeCommand('command name argument value');
+        $command = new SkypeCommand('command name argument value');
         $this->assertEquals('command', $command->getCommand());
         $this->assertEquals('name', $command->getName());
         $this->assertEquals('argument', $command->getArgument());
@@ -13,7 +15,7 @@ class SkypeCommandTest extends \PHPUnit_Framework_TestCase
     
     public function testCommandPopulatesWithFivePartString()
     {
-        $command = new Inviqa\SkypeCommand('command name argument value1 value2');
+        $command = new SkypeCommand('command name argument value1 value2');
         $this->assertEquals('command', $command->getCommand());
         $this->assertEquals('name', $command->getName());
         $this->assertEquals('argument', $command->getArgument());
@@ -22,7 +24,7 @@ class SkypeCommandTest extends \PHPUnit_Framework_TestCase
     
     public function testCommandPopulatesWithAllNullValuesOnEmptyCommandString()
     {
-        $command = new Inviqa\SkypeCommand('');
+        $command = new SkypeCommand('');
         $this->assertNull($command->getCommand());
         $this->assertNull($command->getName());
         $this->assertNull($command->getArgument());
@@ -31,7 +33,7 @@ class SkypeCommandTest extends \PHPUnit_Framework_TestCase
     
     public function testCommandPopulatesWithNullValuesIfNoSpaces()
     {
-        $command = new Inviqa\SkypeCommand('commandNameArgumentValue');
+        $command = new SkypeCommand('commandNameArgumentValue');
         $this->assertEquals('commandNameArgumentValue', $command->getCommand());
         $this->assertNull($command->getName());
         $this->assertNull($command->getArgument());
@@ -40,7 +42,7 @@ class SkypeCommandTest extends \PHPUnit_Framework_TestCase
     
     public function testOnlyValuePopulatesWithNull()
     {
-        $command = new Inviqa\SkypeCommand('command name argument');
+        $command = new SkypeCommand('command name argument');
         $this->assertEquals('command', $command->getCommand());
         $this->assertEquals('name', $command->getName());
         $this->assertEquals('argument', $command->getArgument());

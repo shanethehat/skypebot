@@ -3,6 +3,7 @@
 namespace Inviqa\Command;
 
 use Inviqa\SkypeEngine;
+use Inviqa\SkypeCommand;
 use Inviqa\SkypeCommandInterface;
 
 class ChatMessageCommandHandler implements CommandHandlerInterface
@@ -11,7 +12,7 @@ class ChatMessageCommandHandler implements CommandHandlerInterface
     
     protected $engine;
 
-    protected $commands = array();
+    protected $handlers = array();
     
     public function handleCommand(SkypeCommandInterface $command)
     {
@@ -21,28 +22,19 @@ class ChatMessageCommandHandler implements CommandHandlerInterface
         
         $name = $command->getName();
         
-        if ($command->getArgument() == 'STATUS' && $command->getValue() == 'RECEIVED') {
+        if ($command->getArgument() === 'STATUS' && $command->getValue() === 'RECEIVED') {
             $chatname = new SkypeCommand($this->engine->invoke("GET CHATMESSAGE $name CHATNAME"));
             $handle = new SkypeCommand($this->engine->invoke("GET CHATMESSAGE $name FROM_HANDLE"));
             $body = new SkypeCommand($this->engine->invoke("GET CHATMESSAGE $name BODY"));
-            printf(
-                "%s %s: %s\n",
-                $chatname->getValue(),
-                $handle->getValue(),
-                $body->getValue()
-            );
+//            printf(
+//                "%s %s: %s\n",
+//                $chatname->getValue(),
+//                $handle->getValue(),
+//                $body->getValue()
+//            );
 
-            $msg = array_map('strtolower', explode(' ', $body->getValue()));
-            if (array_key_exists($msg[0], $this->commands)) {
-                $this->commands[$msg[0]]($this->engine, $chatname, $handle, $body);
-            }
-
-            //special case for Andrew "dog boy" Baker
-            if ($handle->getValue() == "abaker.inviqa" && $chatname->getValue() == '#ben.longden/$rowan.merewood;1d3ab49e7f5995e1') {
-                if (stristr(preg_replace('#[\W]#', '', $body->getValue()), 'dog') || stristr($body->getValue(), 'toivo') || stristr($body->getValue(), 'mansfield')) {
-                    $this->engine->invoke("CHATMESSAGE {$chatname->getValue()} Potential dog story detected. :-O");
-                    $this->engine->invoke("ALTER CHAT {$chatname->getValue()} KICK {$handle->getValue()}");
-                }
+            foreach ($this->handlers as $messageHandler) {
+                $messageHandler->handle($chatname, $handle, $body);
             }
         }
         $this->engine->invoke("SET CHATMESSAGE $name SEEN");
@@ -54,9 +46,10 @@ class ChatMessageCommandHandler implements CommandHandlerInterface
         $this->engine = $engine;
     }
     
-    public function add($cmd, callable $action)
+    public function add(ChatMessage\ChatMessageHandlerInterface $messageHandler)
     {
-        $this->commands[strtolower($cmd)] = $action;
+        $messageHandler->setEngine($this->engine);
+        $this->handlers[] = $messageHandler;
         return $this;
     }
 }

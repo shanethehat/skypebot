@@ -14,8 +14,11 @@
     </testsuites>
     <filter>
         <blacklist>
-            <directory suffix=".php">vendor</directory>
+            <directory suffix=".php">./vendor</directory>
         </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
     </filter>
     <logging>
         <log type="coverage-html" target="build/coverage" title="Name of Project"

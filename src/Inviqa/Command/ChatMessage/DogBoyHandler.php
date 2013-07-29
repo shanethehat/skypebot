@@ -11,7 +11,7 @@ class DogBoyHandler extends AbstractHandler implements ChatMessageHandlerInterfa
         $username = $handle->getValue();
         $roomName = $chatname->getValue();
         //special case for Andrew "dog boy" Baker
-        if ($this->isUsernameADogboy($username) && $this->isRoomAdverseToDogStories($roomName)) {
+        if ($this->isUsernameADogboy($username) && $this->isRoomAverseToDogStories($roomName)) {
             $bodyText = $body->getValue();
             if (stristr(preg_replace('#[\W]#', '', $bodyText), 'dog') 
                 || stristr($bodyText, 'toivo') 
@@ -28,7 +28,7 @@ class DogBoyHandler extends AbstractHandler implements ChatMessageHandlerInterfa
         return $username === 'abaker.inviqa';
     }
     
-    private function isRoomAdverseToDogStories($roomName)
+    private function isRoomAverseToDogStories($roomName)
     {
         return $roomName === '#ben.longden/$rowan.merewood;1d3ab49e7f5995e1';
     }

@@ -20,6 +20,7 @@ $engine = new SkypeEngine($n);
 $engine->addCommandHandler(new UserCommandHandler());
 
 $chatMessageHandler = new ChatMessageCommandHandler();
+$engine->addCommandHandler($chatMessageHandler);
 
 $chatMessageHandler->add(new DogBoyHandler())
     ->add(new CreateHandler())
@@ -30,7 +31,5 @@ $chatMessageHandler->add(new DogBoyHandler())
     ->add(new WikiHandler())
     ->add(new DeployHandler())
     ->add(new InfoHandler());   
-
-$engine->addCommandHandler($chatMessageHandler);
 
 return $engine;

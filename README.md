@@ -1,4 +1,4 @@
-# Skpyebot
+# Skypebot
 
 ## Description
 

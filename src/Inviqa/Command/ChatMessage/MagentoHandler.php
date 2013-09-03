@@ -16,6 +16,7 @@ class MagentoHandler extends AbstractHandler implements ChatMessageHandlerInterf
         'Is the layout XML picking up the correct block?',
         'Is the template getting the right data from the block?',
         'Is a store-scope configuration setting over-riding the default setting?',
+        'Are you really checking the same environment as you are making changes on?',
         'Have you sacrificed a chicken?',
     );
     

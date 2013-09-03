@@ -1,0 +1,31 @@
+{
+    "name": "Lunch REST Service",
+    "apiVersion": "1",
+    "baseUrl": "http://apps.inviqa.com/lunch-sheffield",
+    "description": "Provides management of a lunchtime rota.",
+    "operations": {
+        "getCurrentShopper": {
+            "httpMethod": "GET",
+            "uri": "/members/shopper",
+            "summary": "Redirects to the member whose turn it is to shop.",
+            "responseClass": "Inviqa\\Lunch\\Member"
+        },
+        "getCurrentWasher": {
+            "httpMethod": "GET",
+            "uri": "/members/washer",
+            "summary": "Redirects to the member whose turn it is to wash up",
+            "responseClass": "Inviqa\\Lunch\\Member"
+        },
+        "getNextShopper": {
+            "httpMethod": "DELETE",
+            "uri": "members/shopper",
+            "summary": "Instructs the service to select a new shopper"
+        },
+        "getNextWasher": {
+            "httpMethod": "DELETE",
+            "uri": "members/washer",
+            "summary": "Instructs the service to select a new washer"
+        }
+    },
+    "models": {}
+}

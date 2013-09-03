@@ -4,6 +4,12 @@ use Inviqa\Lunch\Member;
 
 class MemberTest extends \PHPUnit_Framework_TestCase
 {
+    public function testMemberImplementsResponseInterface()
+    {
+        $member = new Member(1, 'name', new \DateTime(), new \DateTime());
+        $this->assertInstanceOf('Guzzle\Service\Command\ResponseClassInterface', $member);
+    }
+
     public function testObjectReturnsId()
     {
         $member = new Member(1, 'name', new \DateTime(), new \DateTime());

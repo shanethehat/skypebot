@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Date: Wed, 25 Nov 2009 12:00:00 GMT
+Connection: close
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Ben Longden",
+    "last_shop": "20130820",
+    "last_wash": "20130817"
+}

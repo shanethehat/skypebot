@@ -2,7 +2,10 @@
 
 namespace Inviqa\Lunch;
 
-class Member
+use Guzzle\Service\Command\OperationCommand;
+use Guzzle\Service\Command\ResponseClassInterface;
+
+class Member implements ResponseClassInterface
 {
     protected $id;
     protected $name;
@@ -46,5 +49,24 @@ class Member
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Create a response model object from a completed command
+     *
+     * @param OperationCommand $command That serialized the request
+     *
+     * @return self
+     */
+    public static function fromCommand(OperationCommand $command)
+    {
+        $responseJson = $command->getResponse()->json();
+
+        return new self(
+            $responseJson['id'],
+            $responseJson['name'],
+            \DateTime::createFromFormat('Ymd', $responseJson['last_shop']),
+            \DateTime::createFromFormat('Ymd', $responseJson['last_wash'])
+        );
     }
 }

@@ -13,73 +13,77 @@ class LunchServiceTest extends GuzzleTestCase
 
     public function testServiceRespondsToGetShopper()
     {
-        $member = new Member(
-            1,
-            'Ben Longden',
-            \DateTime::createFromFormat('Ymd', '20130820'),
-            \DateTime::createFromFormat('Ymd', '20130817')
-        );
-
         $service = LunchService::factory();
         $this->setMockResponse($service, array(
             'mock/get-shopper-redirect-response',
             'mock/get-shopper-response'
         ));
         $result = $service->getCurrentShopper();
-        $this->assertEquals($member, $result);
+        $this->assertEquals(
+            new Member(
+                1,
+                'Ben Longden',
+                \DateTime::createFromFormat('Ymd', '20130820'),
+                \DateTime::createFromFormat('Ymd', '20130817')
+            ),
+            $result
+        );
     }
 
     public function testServiceRespondsToGetWasher()
     {
-        $member = new Member(
-            2,
-            'Shane Auckland',
-            \DateTime::createFromFormat('Ymd', '20130811'),
-            \DateTime::createFromFormat('Ymd', '20130809')
-        );
-
         $service = LunchService::factory();
         $this->setMockResponse($service, array(
             'mock/get-washer-response',
             'mock/get-washer-redirect-response',
         ));
         $result = $service->getCurrentWasher();
-        $this->assertEquals($member, $result);
+        $this->assertEquals(
+            new Member(
+                2,
+                'Shane Auckland',
+                \DateTime::createFromFormat('Ymd', '20130811'),
+                \DateTime::createFromFormat('Ymd', '20130809')
+            ),
+            $result
+        );
     }
 
     public function testServiceRespondsToGetNextShopper()
     {
-        $member = new Member(
-            1,
-            'Ben Longden',
-            \DateTime::createFromFormat('Ymd', '20130820'),
-            \DateTime::createFromFormat('Ymd', '20130817')
-        );
-
         $service = LunchService::factory();
         $this->setMockResponse($service, array(
             'mock/next-shopper-response',
             'mock/get-shopper-response'
         ));
         $result = $service->getNextShopper();
-        $this->assertEquals($member, $result);
+        $this->assertEquals(
+            new Member(
+                1,
+                'Ben Longden',
+                \DateTime::createFromFormat('Ymd', '20130820'),
+                \DateTime::createFromFormat('Ymd', '20130817')
+            ),
+            $result
+        );
     }
 
     public function testServiceRespondsToGetNextWasher()
     {
-        $member = new Member(
-            2,
-            'Shane Auckland',
-            \DateTime::createFromFormat('Ymd', '20130811'),
-            \DateTime::createFromFormat('Ymd', '20130809')
-        );
-
         $service = LunchService::factory();
         $this->setMockResponse($service, array(
             'mock/next-washer-response',
             'mock/get-washer-response'
         ));
         $result = $service->getNextWasher();
-        $this->assertEquals($member, $result);
+        $this->assertEquals(
+            new Member(
+                2,
+                'Shane Auckland',
+                \DateTime::createFromFormat('Ymd', '20130811'),
+                \DateTime::createFromFormat('Ymd', '20130809')
+            ),
+            $result
+        );
     }
 }

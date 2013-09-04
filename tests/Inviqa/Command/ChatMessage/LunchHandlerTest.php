@@ -9,6 +9,13 @@ class LunchHandlerTest extends \PHPUnit_Framework_TestCase
         return $this->getMock('\Inviqa\Lunch\LunchServiceInterface');
     }
 
+    protected function getEngineMock()
+    {
+        return $this->getMockBuilder('Inviqa\SkypeEngine')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     public function testLunchHandlerAcceptsLunchService()
     {
         $handler = new LunchHandler($this->getLunchService());
@@ -28,11 +35,33 @@ class LunchHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue('not_lunch'));
 
-        $engine = $this->getMockBuilder('Inviqa\SkypeEngine')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $engine = $this->getEngineMock();
         $engine->expects($this->never())
             ->method('invoke');
+
+        $handler = new LunchHandler($this->getLunchService());
+        $handler->setEngine($engine);
+        $handler->handle($chatnameCommand, $handleCommand, $bodyCommand);
+    }
+
+    public function testHandlerReturnsErrorForBadChatName()
+    {
+        $chatnameCommand = $this->getMock('Inviqa\SkypeCommandInterface');
+        $chatnameCommand->expects($this->exactly(2))
+            ->method('getValue')
+            ->will($this->returnValue('not-the-chat-you-are-looking-for'));
+
+        $handleCommand = $this->getMock('Inviqa\SkypeCommandInterface');
+
+        $bodyCommand = $this->getMock('Inviqa\SkypeCommandInterface');
+        $bodyCommand->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue(':lunch'));
+
+        $engine = $this->getEngineMock();
+        $engine->expects($this->once())
+            ->method('invoke')
+            ->with('CHATMESSAGE not-the-chat-you-are-looking-for This is not a lunch channel.');
 
         $handler = new LunchHandler($this->getLunchService());
         $handler->setEngine($engine);

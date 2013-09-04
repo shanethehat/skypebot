@@ -22,6 +22,11 @@ class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterfac
      */
     protected $washer;
 
+    /**
+     * @var array
+     */
+    protected $lunchChatNames = array();
+
     public function __construct(LunchServiceInterface $lunchService)
     {
         $this->lunchService = $lunchService;
@@ -54,7 +59,7 @@ class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterfac
 
         if (count($args) === 3) {
             if ('next' === $args[1]) {
-                switch ($arg[2]) {
+                switch ($args[2]) {
                     case 'washer':
                         $this->getNextWasher();
                         $this->engine->invoke("CHATMESSAGE {$chatname->getValue()} " . $this->buildFullMessage());
@@ -66,6 +71,11 @@ class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterfac
                 }
             }
         }
+    }
+
+    protected function isLunchChannel($chatName)
+    {
+        return in_array($chatName, $this->lunchChatNames);
     }
 
     protected function buildFullMessage()

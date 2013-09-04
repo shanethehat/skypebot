@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b86638621cb2f7f780669583644ecff6",
+    "hash": "5b73ed972dfb3522c12596ca21f446b4",
     "packages": [
         {
             "name": "guzzle/guzzle",
@@ -575,9 +575,9 @@
     "stability-flags": [
 
     ],
-    "platform": [
-
-    ],
+    "platform": {
+        "php": ">=5.4"
+    },
     "platform-dev": [
 
     ]

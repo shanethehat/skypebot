@@ -12,7 +12,8 @@ class Member implements ResponseClassInterface, MemberInterface
     protected $lastShop;
     protected $lastWash;
 
-    public function __construct($id, $name, \DateTime $lastShop, \DateTime $lastWash) {
+    public function __construct($id, $name, \DateTime $lastShop, \DateTime $lastWash)
+    {
         $this->id = $id;
         $this->name = $name;
         $this->lastShop = $lastShop;

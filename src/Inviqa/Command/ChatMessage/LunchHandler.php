@@ -7,6 +7,8 @@ use Inviqa\Lunch\LunchServiceInterface;
 
 class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterface
 {
+    const SHEFFIELD_LUNCH_CHANNEL = '#blongden.inviqa/$rmerewood.inviqa;7010cd67362530ce';
+
     /**
      * @var \Inviqa\Lunch\LunchServiceInterface
      */
@@ -25,7 +27,9 @@ class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterfac
     /**
      * @var array
      */
-    protected $lunchChatNames = array();
+    protected $lunchChatNames = array(
+        self::SHEFFIELD_LUNCH_CHANNEL,
+    );
 
     public function __construct(LunchServiceInterface $lunchService)
     {
@@ -50,13 +54,6 @@ class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterfac
             return true;
         }
 
-        if (count($args) === 2) {
-            if ('help' === $args[1]) {
-                $this->engine->invoke("CHATMESSAGE {$chatname->getValue()} " . $this->buildHelpMessage());
-                return true;
-            }
-        }
-
         if (count($args) === 3) {
             if ('next' === $args[1]) {
                 switch ($args[2]) {
@@ -71,6 +68,10 @@ class LunchHandler extends AbstractHandler implements ChatMessageHandlerInterfac
                 }
             }
         }
+
+        // if all else fails, display help
+        $this->engine->invoke("CHATMESSAGE {$chatname->getValue()} " . $this->buildHelpMessage());
+        return true;
     }
 
     protected function isLunchChannel($chatName)

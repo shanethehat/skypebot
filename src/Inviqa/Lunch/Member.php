@@ -5,7 +5,7 @@ namespace Inviqa\Lunch;
 use Guzzle\Service\Command\OperationCommand;
 use Guzzle\Service\Command\ResponseClassInterface;
 
-class Member implements ResponseClassInterface
+class Member implements ResponseClassInterface, MemberInterface
 {
     protected $id;
     protected $name;

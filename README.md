@@ -1,5 +1,7 @@
 # Skypebot
 
+[![Build Status](https://travis-ci.org/inviqa/skypebot.png?branch=master)](https://travis-ci.org/inviqa/skypebot)
+
 ## Description
 
 A PHP backend for controlling a Skype user via a DBus connection to a running Skype client.

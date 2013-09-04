@@ -197,4 +197,36 @@ class LunchHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->setEngine($engine);
         $handler->handle($chatnameCommand, $handleCommand, $bodyCommand);
     }
+
+    public function testHandlerReturnsHelpMessage()
+    {
+        $chatnameCommand = $this->getMock('Inviqa\SkypeCommandInterface');
+        $chatnameCommand->expects($this->exactly(2))
+            ->method('getValue')
+            ->will($this->returnValue(LunchHandler::SHEFFIELD_LUNCH_CHANNEL));
+
+        $handleCommand = $this->getMock('Inviqa\SkypeCommandInterface');
+
+        $bodyCommand = $this->getMock('Inviqa\SkypeCommandInterface');
+        $bodyCommand->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue(':lunch anything at all'));
+
+        $engine = $this->getEngineMock();
+        $engine->expects($this->once())
+            ->method('invoke')
+            ->will(
+                $this->returnValue(
+                    "CHATMESSAGE " . LunchHandler::SHEFFIELD_LUNCH_CHANNEL . "\n"
+                        . ":lunch - displays the current shopper and washer\n"
+                        . ":lunch help - displays this message\n"
+                        . ":lunch next shopper - gets the next shopper\n"
+                        . ":lunch next washer - gets the next washer"
+                )
+            );
+
+        $handler = new LunchHandler($this->getLunchService());
+        $handler->setEngine($engine);
+        $handler->handle($chatnameCommand, $handleCommand, $bodyCommand);
+    }
 }

@@ -21,7 +21,10 @@ class LunchServiceTest extends GuzzleTestCase
         );
 
         $service = LunchService::factory();
-        $this->setMockResponse($service, 'mock/get-shopper-response');
+        $this->setMockResponse($service, array(
+            'mock/get-shopper-redirect-response',
+            'mock/get-shopper-response'
+        ));
         $result = $service->getCurrentShopper();
         $this->assertEquals($member, $result);
     }
@@ -36,7 +39,10 @@ class LunchServiceTest extends GuzzleTestCase
         );
 
         $service = LunchService::factory();
-        $this->setMockResponse($service, 'mock/get-washer-response');
+        $this->setMockResponse($service, array(
+            'mock/get-washer-response',
+            'mock/get-washer-redirect-response',
+        ));
         $result = $service->getCurrentWasher();
         $this->assertEquals($member, $result);
     }
